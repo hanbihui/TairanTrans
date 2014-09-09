@@ -1,32 +1,32 @@
-#Card Game Mechanics in Sprite Kit with Swift
+#Swift中用Sprite Kit制作的卡牌游戏机制
 ![Example card image](http://cdn4.raywenderlich.com/wp-content/uploads/2014/07/card-article-header.png)
 
-*Learn how to implement basic card game mechanics and animation.*
+*学习如何实现基本的卡牌游戏机制和动画。*
 
-For over 20 years, people have played Collectible Card Games (CCGs). The [Wikipedia entry](http://en.wikipedia.org/wiki/Collectible_card_game) gives a fairly thorough recount of how these games evolved, which appear to have been inspired by role playing games like Dungeons and Dragons. Magic the Gathering is one example of a modern CCG.
+在过去的20年里，人们玩过收集类卡牌游戏(CCGs)。[维基百科](http://en.wikipedia.org/wiki/Collectible_card_game)提供了比较详尽的这些游戏演变的过程，它似乎启发了角色扮演游戏（RPG）像龙与地下城。万智牌是一个现代化的CCG的一个例子。
 
-At their core, CCGs are a set of custom cards representing characters, locations, abilities, events, etc. To play the game, the players must first build their own decks, then they use their individual decks to play. Most players make decks that accentuate certain factions, creatures or abilities.
+其核心，CCGs是一组自定义卡片代表了人物，位置，能力，事件等。玩游戏前，玩家首先必须构建他们自己的牌组，然后他们才能使用他们独特的牌组来玩游戏。大多数玩家的牌组都会突出某种派别，生物或能力。
 
-In this tutorial, you’ll use Sprite Kit to manipulate images that serve as cards in a CCG app. You’ll move cards on the screen, animate them to show which cards are active, flip them over and enlarge them so you can read the text — or just admire the artwork.
+在本教程中，你将在CCG应用程序中使用Sprite Kit操纵图像卡。你会在屏幕上移动卡片，移动它们来看哪些卡片是有效的，翻转它们并放大它们来看卡片上的文字 — 或欣赏艺术作品。
 
-If you’re new to SpriteKit, you may want to read through [a beginner tutorial](http://www.raywenderlich.com/42699/spritekit-tutorial-for-beginners) or indulge yourself with the [iOS Games by Tutorials book](http://www.raywenderlich.com/store/ios-games-by-tutorials). If you’re new to Swift, make sure you check out the [Swift Quick Start series](http://www.raywenderlich.com/74438/swift-tutorial-a-quick-start).
+如果你还不熟悉SpriteKit，你可以阅读[初学者的教程](http://www.raywenderlich.com/42699/spritekit-tutorial-for-beginners)或[iOS游戏教程](http://www.raywenderlich.com/store/ios-games-by-tutorials)。如果你还不熟悉Swift，确认你已经了解了[Swift快速入门系列](http://www.raywenderlich.com/74438/swift-tutorial-a-quick-start).
 
-##Getting Started
+##开始
 
-Since this is a card game, the best place to start is with the actual cards. Download the [starter project](https://bitbucket.org/bcbroom/ccg-assets-only-swift/get/master.zip) which provides a SpriteKit project preset for an iPad in landscape mode, as well as all the images, fonts and sound files you’ll need to create a functional sample game.
+由于这是一个卡牌游戏，最好的开始就是看实际的卡片。下载[启动项目](https://bitbucket.org/bcbroom/ccg-assets-only-swift/get/master.zip)，它提供了一个iPad上横向模式下的SpriteKit项目，以及所有的图像，字体和声音文件，你需要创建一个功能性的示例游戏。
 
-Take a minute to look around the project to acquaint yourself with its file structure and content. You should see the following project folders:
+花一点时间来熟悉项目的文件结构和内容。你应该能看到如下的项目目录：
 
-1. **System**: Contains the basic files to set up a SpriteKit project. This includes **AppDelegate.swift**, **GameViewController.swift**, and **Main.storyboard**
-2. **Scenes**: Contains an empty main scene **GameScene.swift** which will manage the game content.
-3. **Card**: Contains an empty **Card.swift** file which will manage the playing cards.
-4. **Supporting Files**: Contains all the images, fonts, and sound files you’ll use in the tutorial.
+1. **System**: 包含设置一个SpriteKit项目的基础文件。它包含了**AppDelegate.swift**，**GameViewController.swift**和**Main.storyboard**
+2. **Scenes**: 包含管理游戏内容的一个空主场景文件**GameScene.swift**。
+3. **Card**: 包含管理卡牌的一个空的**Card.swift**文件。
+4. **Supporting Files**: 包含你将在本教程中使用的所有图像、字体和声音文件。
 
-This game just wouldn’t be as cool without the art, so I’d like to give special thanks to Vicki from [gameartguppy.com](http://www.gameartguppy.com/) for the beautiful card artwork!
+这个游戏没有美工不会显得很酷，所以我想特别感谢[gameartguppy.com](http://www.gameartguppy.com/)的Vicki的美丽的卡牌插图！
 
-##A Classy Start
+##一个优雅的开始
 
-Since you can’t play a card game without cards, start by making a class to represent them. **Card.swift** is currently a blank Swift file, so find it and add:
+既然我们需要使用卡牌玩卡牌游戏，我们将创建一个卡片类来代表它们。目前**Card.swift**是一个空的Swift文件，所以找到它并添加：
 
 	import Foundation
 	import SpriteKit
@@ -43,11 +43,11 @@ Since you can’t play a card game without cards, start by making a class to rep
 	  }
 	}
 
-You’re declaring Card as a subclass of **SKSpriteNode**.
+你声明了Card是**SKSpriteNode**的子类。
 
-To create a simple sprite with an image, you would use **SKSpriteNode(imageNamed:)**. In order to keep this behavior, you use the inherited initializer which must call the super classes designated initializer **init(texture:color:size:)**. You do not support **NSCoding** in this game.
+要根据图像创建一个简单的精灵，你可以使用**SKSpriteNode(imageNamed:)**。为了保持这种行为，你需要使用继承的初始化函数，它将调用父类的指定的初始化函数**init(texture:color:size:)**。在本游戏中你不支持**NSCoding**。
 
-To put sprites on the screen, open **GameScene.swift** and add the following code to **didMoveToView()**:
+要把精灵放到屏幕上，打开**GameScene.swift**然后添加下列代码到**didMoveToView()**中：
 
 	let wolf = Card(imageNamed: "card_creature_wolf.png")
 	wolf.position = CGPointMake(100,200)
@@ -57,23 +57,23 @@ To put sprites on the screen, open **GameScene.swift** and add the following cod
 	bear.position = CGPointMake(300, 200)
 	addChild(bear)
 
-Build and run the project, and take a moment to admire the wolf and bear.
+构建和运行项目，并花一点时间来欣赏儿狼和熊。
 
 ![Card Images on iPad Screen](http://cdn2.raywenderlich.com/wp-content/uploads/2014/07/ClassyStartStaticResized.png)
 
-*A good start…*
+*一个好的开始…*
 
-Rule #1 for creating card games: start with creative, imaginative art. Looks like your app is shaping up nicely!
+规则 #1 创建卡牌游戏：先有创意和富有想象力的美工。看下来你的应用程序塑造的不错！
 
->**Note:** Depending on screen size, you may want to zoom the simulator window, using Window\Scale\50% to fit on the screen. I also recommend using the iPad 2 simulator.
+>**注：** 根据屏幕的大小，你可能需要缩放模拟器的窗口，使用Window\Scale\50%来适应屏幕。我也推荐使用iPad 2模拟器。
 
-Looking at a couple of cards is fun and all, but the UI will be much cooler if you can actually move the cards. You’ll do that next!
+看这一对卡牌非常有趣，但如果你能真正的移动卡片UI将会更酷。你将在下面做这些！
 
-##I Want to Move It, Move It…
+##我想移动它，移动它…
 
-No matter the quality of the art, cards sitting on a screen won’t earn your app any rave reviews, because you need be able to drag them around like you can do with real paper cards. The simplest way to do this is to handle touches in the scene itself.
+无论美工的质量如何，卡牌静坐在屏幕上不会让你的应用程序获得任何的好评，因为你需要像你在玩真实的纸质卡牌一样能拖动它们。实现它的最简单的办法是在场景中控制触摸事件。
 
-Still in **GameScene.swift**, add this new function to the class:
+依旧在**GameScene.swift**中，添加这个新的函数到类中：
 
 	override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
 	  for touch in touches {
@@ -83,22 +83,22 @@ Still in **GameScene.swift**, add this new function to the class:
 	  }
 	}
 
-Build and run the project, and drag those two cards around the display.
+构建和运行项目，然后试着拖动这两个卡牌。
 
 ![Cards move, but sometimes slide under other cards](http://cdn4.raywenderlich.com/wp-content/uploads/2014/07/MoveCardsClip.gif)
 
-*The cards now move, but sometimes slide behind other cards. Read on to fix the problem.*
+*卡牌现在可以移动了，但有时卡牌会被遮住。继续下面的阅读来解决这个问题。*
 
-As you play around with this, you’ll notice two major issues:
+你玩过之后，将注意到两个主要的问题：
 
-1. First, since the sprites are at the same **zPosition**, they are arranged in the same order they are added to the scene. This means the bear card is “above” the wolf card. If you’re dragging the wolf, it appears to slide beneath the bear.
-2. Second, **nodeAtPoint()** returns the topmost sprite at that point. So when you drag the wolf under the bear, **nodeAtPoint()** returns the bear sprite and start changes its position, so you might find yourself moving the bear even though you originally moved the wolf.
+1. 首先，由于精灵都在相同的**zPosition**，所以它们在被添加到场景中时被布置成相同的顺序。这意味着熊卡牌会在狼的卡牌“上面”。如果你拖动狼，它似乎被熊遮住了。
+2. 第二，**nodeAtPoint()**返回这个点上的最上面的精灵。所以当你拖动熊下面的狼时，**nodeAtPoint()**返回熊精灵然后开始改变它的位置，所以你可能会发现你拖动狼时熊会被拖动。
 
-While this effect is almost magical, it’s not the kind of magic you want to in the final app!
+这个效果虽然很神奇，但它并不是你在最终的应用程序中想要的！
 
-To fix this, you’ll modify the card’s zPosition while dragging. Your first inclination might be to change the **zPosition** of the sprite in **touchesMoved**, but this isn’t a good approach if you want to change it back later.
+为了解决这个问题，你将需要在拖动时修改卡牌的zPosition。你的第一反应可能是在**touchesMoved**中修改精灵的**zPosition**，但如果你想在后面把它改回来，这不是一种好的办法。
 
-Using the beginning and ending functions is a better strategy. Still in **GameScene.swift**, and add the following methods:
+使用开始和结束函数是一个更好的策略。依旧在**GameScene.swift**中，添加下列函数：
 
 	override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
 	  for touch in touches {
@@ -116,47 +116,47 @@ Using the beginning and ending functions is a better strategy. Still in **GameSc
 	  }
 	}
 
-Build and run the project again, and you’ll see the cards sliding over each other as you would expect.
+再次构建和运行项目，你将看到卡牌像我们期望的那样滑动。
 
 ![Cards now correctly move over each other](http://cdn4.raywenderlich.com/wp-content/uploads/2014/07/MoveCardsNoClip.gif)
 
-*Cards now correctly move over each other, but looks a little plain. You’ll fix that next.*
+*卡片现在正确的移动了，但看起来有些平淡。你将在后面解决这个问题。*
 
-Make sure you pick a **zPosition** value that is greater than other cards will be. In the sample game at the end of the tutorial, there are some overlay elements at **zPosition** of 20. The number 19 ensures the overlay elements showed over the cards.
+确保你挑选了大于其他卡牌的一个**zPosition**值。在本教程的示例游戏中，有一些重叠的元素的**zPosition**为20。数字19确保了重叠的元素显示在卡牌之上。
 
-Now the card is moving properly over other cards, but now you need to add some satisfying depth — say, a visual indication that the card has been lifted up.
+现在卡牌已经正确的移动了，但你需要添加一些令人满意的内容 — 一个可视化的指示表明卡牌被举起了。
 
-Time to make your cards dance!
+是时候让你的卡牌跳舞了！
 
-##Card Animations
+##卡牌动画
 
-Still in **GameScene.swift**, add the following to the end of the code inside the **for** loop of **touchesBegan()**
+依旧在**GameScene.swift**中，添加下面的代码到**touchesBegan()**函数中**for**循环的结尾
 
 	let liftUp = SKAction.scaleTo(1.2, duration: 0.2)
 	touchedNode.runAction(liftUp, withKey: "pickup")
 
-and similarly in **touchesEnded()**
+在**touchesEnded()**中添加类似的内容
 
 	let dropDown = SKAction.scaleTo(1.0, duration: 0.2)
 	touchedNode.runAction(dropDown, withKey: "drop")
 
-Here you’re using the **scaleTo(scale:duration:)** method of **SKAction** to grow the width and height of the card to 1.2x its original size when clicked and back down to 1.0 when released.
+在这里当你点击卡牌时，使用了**SKAction**的**scaleTo(scale:duration:)**函数来增加卡牌的宽度和高度为它原来的1.2倍，当你松开时变回原来的大小。
 
-Build and run the project to see how this looks.
+构建和运行项目来查看效果。
 
 ![Moving cards with pickup and drop down animation.](http://cdn1.raywenderlich.com/wp-content/uploads/2014/07/MoveCardsPickupDrop.gif)
 
-*This simple animation gives the appearance of picking up a card and putting it back down. Sometimes the simplest animations are the most effective.*
+*这个简单的动画像是把卡牌拿起来和放下去。有时候最简单的动画也是最有效的。*
 
-Tinker with the scale and duration values to find what the levels that look best to you. If you set the lift and drop durations as different values you can make it appear as though that card lifts slowly, then drops quickly when released.
+调整你scale和duration的值来找到最适合你的。如果你设置拿起和放下的durations为不同的值，你可以让它看起来拿起的时候比较慢，放下的时候比较快。
 
-##Wiggle, Wiggle, Wiggle
+##摆动，摆动，摆动
 
-Dragging cards around now works pretty well, but you should add a bit of flair. Making the cards appear to flutter around their y-axis certainly qualifies as flair.
+拖动卡牌现在工作得已经很好了，但你应该做得更好。让卡牌围绕y轴拍翅膀当然是很棒的。
 
-Since SpriteKit is a pure 2D framework, there doesn’t seem to be any way to do a partial rotation effect on a sprite. What you can do, however, is change the xScale property to give the illusion of rotation.
+由于SpriteKit是一个纯2D框架，似乎没有办法做到精灵的部分转动效果。然后你可以这么做，修改xScale属性来制造转动的假象。
 
-Again, you’ll add code to the **touchesBegan()** and **touchesEnded()** pair of functions. In **touchesBegan()** add the following code to the end of the **for** loop:
+你将添加代码到**touchesBegan()**和**touchesEnded()**函数中。在**touchesBegan()**中添加如下代码到**for**循环的最后：
 
 	let wiggleIn = SKAction.scaleXTo(1.0, duration: 0.2)
 	let wiggleOut = SKAction.scaleXTo(1.2, duration: 0.2)
@@ -165,32 +165,32 @@ Again, you’ll add code to the **touchesBegan()** and **touchesEnded()** pair o
 	 
 	touchedNode.runAction(wiggleRepeat, withKey: "wiggle")
 
-And similarly, in **touchesEnded()** add:
+在**touchesEnded()**中添加类似的代码：
 
 	touchedNode.removeActionForKey("wiggle")
 
-This code makes the card appear to rotate back and forth — just a tad — as it moves around. This effect makes use of the **reaction(action:, withKey:)** method to add a string name to the action so that you can cancel it later.
+这些代码让卡片回来转动 — 只是一点点 — 当它来回移动时。这个效果利用了**reaction(action:, withKey:)**函数添加了一个字符串名称到这个动作，这样你可以在后面取消它。
 
-There is a small caveat to this approach: when you remove the animation, it leaves the sprite wherever it is in the animation cycle.
+对于这种做法有一个小小的警告：当你删除动画时，无论它在不在动画的生命周期中，它会离开精灵。
 
-You already have an action to return the card to its initial scale value of 1.0. Since scale sets both the x and y scale, that part is taken care of, but if you use another property, remember to return the initial value in the **touchesEnded** function.
+你已经有一个动作使卡牌返回它的初始缩放值1.0。由于缩放同时设置x和y缩放，所以这部分不用担心，但如果你使用其他的属性，记得在**touchesEnded**函数中返回到初始值。
 
-Build and run the project, so you can see the cards now flutter when you drag them around.
+构建和运行项目，你会看到当你拖动他们时，卡牌会拍翅膀。
 
 ![Card with scaling animation to fake 3d rotation.](http://cdn4.raywenderlich.com/wp-content/uploads/2014/07/CardWiggleX.gif)
 
-*A simple animation to show that this card is currently active.*
+*一个简单的动画来显示这个卡牌是当前活动的。*
 
->**Challenge:** In the bonus example game at the end of the tutorial, you’ll learn about using zRotation to make the cards wobble back and forth.
-Try replacing the scaleXTo actions with rotateBy to replace the “wiggle” animation with a “rocking” animation. Remember to make it a cycle, which means it needs to return to its starting point before repeating.
+>**挑战：**在本教程最后的额外的示例游戏中，你将了解如何使用zRotation来让卡牌来回摇晃。
+试着用rotateBy更换scaleXTo动作，以“摇晃”动画取代“摆动”动画。记得使其循环，这意味着它需要在重复之前返回它的出发点。
 
 ![Card rotates slightly back and forth.](http://cdn2.raywenderlich.com/wp-content/uploads/2014/07/CardWiggleRotation.gif)
 
-*Try to reproduce this effect for the wiggle animation.*
+*尝试重现这个摇摆动画的效果。*
 
-###Solution Inside
+###解决方法
 
-Replace the current wiggle code with the following in **touchesBegan**:
+在**touchesBegan**中替换下列摆动代码:
 
 	let rotR = SKAction.rotateByAngle(0.15, duration: 0.2)
 	let rotL = SKAction.rotateByAngle(-0.15, duration: 0.2)
@@ -198,17 +198,17 @@ Replace the current wiggle code with the following in **touchesBegan**:
 	let wiggle = SKAction.repeatActionForever(cycle)
 	touchedNode.runAction(wiggle, withKey: "wiggle")
 
-This gives your cards a satisfying little wiggle, but there’s still one problem. Try dropping the card mid-cycle. Does it rotate incorrectly? Yes, and that’s your next problem to solve, by adding the following line to **touchesEnded** at the end of the **for** loop:
+这给你的卡牌添加了令人满意的小摆动，但是仍然有一个问题。试着拖动卡牌完成半个摆动周期。它的旋转是不是错误的？是的，这就是你下一步需要解决的问题，添加下面这行代码到**touchesEnded**中**for**循环的结尾：
 
 	runAction(SKAction.rotateToAngle(0, duration: 0.2), withKey:"rotate")
 
-Now you have a nice looking wiggle action that properly rotates itself when you let go of a card!
+现在当你释放卡牌时有了一个正确旋转的漂亮的摇摆动画！
 
-##Tracking Damage
+##追踪伤害
 
-In many collectible card games, monsters like these have hit points associated with them, and can fight each other.
+在很多卡牌收集游戏中，像这些怪物会有关联的伤害值，可以与其他卡牌进行战斗。
 
-To implement this, you’ll need a label on top of the cards so the user can track damage inflicted on each creature. Still in **GameScene.swift**, add the following new method:
+要实现这一点，你需要在卡牌的顶端添加一个标签，这样用户可以追踪每个生物生成的伤害。依旧在**GameScene.swift**中，添加如下新方法：
 
 	func newDamageLabel() -> SKLabelNode {
 	  let damageLabel = SKLabelNode(fontNamed: "OpenSans-Bold")
@@ -221,34 +221,34 @@ To implement this, you’ll need a label on top of the cards so the user can tra
 	  return damageLabel
 	}
 
-This helper method creates a new **SKLabelNode** which in turn will display the damage inflicted upon each card. It uses a custom font that is included in the starter project with the correct info.plist settings.
+这个辅助方法创建了一个新的**SKLabelNode**，它将显示每个卡牌造成的伤害。它使用了启动项目中正确的info.plist设置中包含的自定义字体。
 
->**Note:** For more information on installing custom fonts, check out Chapter 7 in [iOS Games by Tutorials](http://www.raywenderlich.com/store/ios-games-by-tutorials), “Labels”.
+>**注：**关于安装自定义字体的更多信息，请查看[iOS游戏教程](http://www.raywenderlich.com/store/ios-games-by-tutorials)中的第7章, “标签”.
 
-Are you wondering how the position works in this example?
+你想知道示例中的位置是怎么工作的吗？
 
-Since the label is a child of the card sprite, the position is relative to the sprite’s anchor point and that is the center, by default. Usually this just takes some trial and error to get the label positioned exactly where you want it.
+由于标签是卡牌精灵的子节点，位置默认是相对于精灵中心的锚点。通常经过一些尝试就可以得到你想要的标签位置。
 
-Use this new method to add a damage label to each card by adding the following code to the end of **didMoveToView()**:
+添加如下代码到**didMoveToView()**结尾，来给每个卡牌添加一个伤害标签：
 
 	wolf.addChild(newDamageLabel())
 	bear.addChild(newDamageLabel())
 
-Build and run the project. You should now see a red ’0′ within each card.
+构建和运行项目。你现在应该在每个卡牌中看到一个红色的“0”。
 
 ![Card with a label for damage taken.](http://cdn2.raywenderlich.com/wp-content/uploads/2014/07/DamageLabelResized.png)
 
-*Cards now have a label that shows how much damage they’ve taken.*
+*卡牌现在有一个显示受到多少伤害的标签了。*
 
-Try dragging a card, but click on the label to start dragging rather than the card itself. Notice that the label flys off somewhere — perhaps to a magical kingdom where it can rule with impunity?
+试着拖动卡牌，但是点击该标签拖动时拖动的是标签而不是卡牌本身。注意标签飞到了什么地方 — 也许是一个神奇的国度在那里可以肆无忌惮？
 
-No, it’s not actually that mysterious. ;]
+不，其他它不是那么神秘。;]
 
-The problem here is that when you call **nodeAtPoint** it returns the topmost **SKNode** of any type, which in this case is the **SKLabelNode**. When you then change the node’s position, the label moves instead of the card. Ahhh…yes, there is a logical explanation.
+这里的问题是当你调用**nodeAtPoint**时，它返回**SKNode**最上层的任何类型的节点，在这种情况下是**SKLabelNode**。当你改变节点的位置，移动的是标签而不是卡牌。呃。。。是的，这是合乎逻辑的解释。
 
 ![Dragging on top of the damage label causes problems.](http://cdn3.raywenderlich.com/wp-content/uploads/2014/07/LabelOops.png)
 
-*The result of starting a touch on top of the damage label. Oops. (Changed the background to white to make the label more visible)*
+*触摸顶部伤害标签的结果。哎呀。（改变背景为白色，使标签更明显）*
 
 ##Pros and Cons Of Scene Touch Handling
 
