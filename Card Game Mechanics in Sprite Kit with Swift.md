@@ -1,4 +1,4 @@
-#Swift中用Sprite Kit制作的卡牌游戏机制
+#在Swift中用Sprite Kit制作的卡牌游戏机制
 ![Example card image](http://cdn4.raywenderlich.com/wp-content/uploads/2014/07/card-article-header.png)
 
 *学习如何实现基本的卡牌游戏机制和动画。*
@@ -7,13 +7,13 @@
 
 其核心，CCGs是一组自定义卡片代表了人物，位置，能力，事件等。玩游戏前，玩家首先必须构建他们自己的牌组，然后他们才能使用他们独特的牌组来玩游戏。大多数玩家的牌组都会突出某种派别，生物或能力。
 
-在本教程中，你将在CCG应用程序中使用Sprite Kit操纵图像卡。你会在屏幕上移动卡片，移动它们来看哪些卡片是有效的，翻转它们并放大它们来看卡片上的文字 — 或欣赏艺术作品。
+在本教程中，你将在CCG应用程序中使用Sprite Kit操纵图片卡。你会在屏幕上移动卡牌，移动它们来看哪些卡牌是有效的，翻转它们并放大它们来看卡牌上的文字 — 或欣赏艺术作品。
 
 如果你还不熟悉SpriteKit，你可以阅读[初学者的教程](http://www.raywenderlich.com/42699/spritekit-tutorial-for-beginners)或[iOS游戏教程](http://www.raywenderlich.com/store/ios-games-by-tutorials)。如果你还不熟悉Swift，确认你已经了解了[Swift快速入门系列](http://www.raywenderlich.com/74438/swift-tutorial-a-quick-start).
 
 ##开始
 
-由于这是一个卡牌游戏，最好的开始就是看实际的卡片。下载[启动项目](https://bitbucket.org/bcbroom/ccg-assets-only-swift/get/master.zip)，它提供了一个iPad上横向模式下的SpriteKit项目，以及所有的图像，字体和声音文件，你需要创建一个功能性的示例游戏。
+由于这是一个卡牌游戏，最好的开始就是看实际的卡牌。下载[启动项目](https://bitbucket.org/bcbroom/ccg-assets-only-swift/get/master.zip)，它提供了一个iPad上横向模式下的SpriteKit项目，以及所有的图像，字体和声音文件，和你需要创建的一个功能性的示例游戏。
 
 花一点时间来熟悉项目的文件结构和内容。你应该能看到如下的项目目录：
 
@@ -26,7 +26,7 @@
 
 ##一个优雅的开始
 
-既然我们需要使用卡牌玩卡牌游戏，我们将创建一个卡片类来代表它们。目前**Card.swift**是一个空的Swift文件，所以找到它并添加：
+既然我们需要使用卡牌玩卡牌游戏，我们将创建一个卡牌类来代表它们。目前**Card.swift**是一个空的Swift文件，所以找到它并添加：
 
 	import Foundation
 	import SpriteKit
@@ -43,9 +43,9 @@
 	  }
 	}
 
-你声明了Card是**SKSpriteNode**的子类。
+你声明了**Card**是**SKSpriteNode**的子类。
 
-要根据图像创建一个简单的精灵，你可以使用**SKSpriteNode(imageNamed:)**。为了保持这种行为，你需要使用继承的初始化函数，它将调用父类的指定的初始化函数**init(texture:color:size:)**。在本游戏中你不支持**NSCoding**。
+要根据图片创建一个简单的精灵，你可以使用**SKSpriteNode(imageNamed:)**。为了保持这种行为，你需要使用继承的初始化函数，它将调用父类的指定的初始化函数**init(texture:color:size:)**。在本游戏中你不支持**NSCoding**。
 
 要把精灵放到屏幕上，打开**GameScene.swift**然后添加下列代码到**didMoveToView()**中：
 
@@ -63,15 +63,15 @@
 
 *一个好的开始…*
 
-规则 #1 创建卡牌游戏：先有创意和富有想象力的美工。看下来你的应用程序塑造的不错！
+规则 #1 创建卡牌游戏：先有创意和富有想象力的美工。看起来你的应用程序塑造的不错！
 
 >**注：** 根据屏幕的大小，你可能需要缩放模拟器的窗口，使用Window\Scale\50%来适应屏幕。我也推荐使用iPad 2模拟器。
 
-看这一对卡牌非常有趣，但如果你能真正的移动卡片UI将会更酷。你将在下面做这些！
+看这一对卡牌非常有趣，但如果你能真正的移动卡片UI将会更酷。你将在下面做到这些！
 
 ##我想移动它，移动它…
 
-无论美工的质量如何，卡牌静坐在屏幕上不会让你的应用程序获得任何的好评，因为你需要像你在玩真实的纸质卡牌一样能拖动它们。实现它的最简单的办法是在场景中控制触摸事件。
+无论美工的质量如何，卡牌静坐在屏幕上不会让你的应用程序获得任何的好评，因为你需要像你在玩真实的纸质卡牌一样能拖动它们。实现它的最简单的办法是在场景中处理触摸事件。
 
 依旧在**GameScene.swift**中，添加这个新的函数到类中：
 
@@ -96,7 +96,7 @@
 
 这个效果虽然很神奇，但它并不是你在最终的应用程序中想要的！
 
-为了解决这个问题，你将需要在拖动时修改卡牌的zPosition。你的第一反应可能是在**touchesMoved**中修改精灵的**zPosition**，但如果你想在后面把它改回来，这不是一种好的办法。
+为了解决这个问题，你将需要在拖动时修改卡牌的**zPosition**。你的第一反应可能是在**touchesMoved**中修改精灵的**zPosition**，但如果你想在后面把它改回来，这不是一种好的办法。
 
 使用开始和结束函数是一个更好的策略。依旧在**GameScene.swift**中，添加下列函数：
 
@@ -148,13 +148,13 @@
 
 *这个简单的动画像是把卡牌拿起来和放下去。有时候最简单的动画也是最有效的。*
 
-调整你scale和duration的值来找到最适合你的。如果你设置拿起和放下的durations为不同的值，你可以让它看起来拿起的时候比较慢，放下的时候比较快。
+调整你scale和duration的值来找到最适合你的。如果你设置拿起和放下的durations为不同的值，你可以让它看起来像拿起的时候比较慢，放下的时候比较快。
 
 ##摆动，摆动，摆动
 
 拖动卡牌现在工作得已经很好了，但你应该做得更好。让卡牌围绕y轴拍翅膀当然是很棒的。
 
-由于SpriteKit是一个纯2D框架，似乎没有办法做到精灵的部分转动效果。然后你可以这么做，修改xScale属性来制造转动的假象。
+由于SpriteKit是一个纯2D框架，似乎没有办法做到精灵的部分转动效果。然而你可以这么做，修改xScale属性来制造转动的假象。
 
 你将添加代码到**touchesBegan()**和**touchesEnded()**函数中。在**touchesBegan()**中添加如下代码到**for**循环的最后：
 
@@ -208,7 +208,7 @@
 
 在很多卡牌收集游戏中，像这些怪物会有关联的伤害值，可以与其他卡牌进行战斗。
 
-要实现这一点，你需要在卡牌的顶端添加一个标签，这样用户可以追踪每个生物生成的伤害。依旧在**GameScene.swift**中，添加如下新方法：
+要实现这一点，你需要在卡牌的顶端添加一个标签，这样用户可以追踪每个生物造成的伤害。依旧在**GameScene.swift**中，添加如下新方法：
 
 	func newDamageLabel() -> SKLabelNode {
 	  let damageLabel = SKLabelNode(fontNamed: "OpenSans-Bold")
@@ -240,7 +240,7 @@
 
 *卡牌现在有一个显示受到多少伤害的标签了。*
 
-试着拖动卡牌，但是点击该标签拖动时拖动的是标签而不是卡牌本身。注意标签飞到了什么地方 — 也许是一个神奇的国度在那里可以肆无忌惮？
+试着拖动卡牌，但是点击该标签拖动时拖动的是标签而不是卡牌本身。注意标签飞到了什么地方 — 也许是一个神奇的国度在那里可以肆无忌惮的移动？
 
 不，其他它不是那么神秘。;]
 
@@ -250,39 +250,39 @@
 
 *触摸顶部伤害标签的结果。哎呀。（改变背景为白色，使标签更明显）*
 
-##Pros and Cons Of Scene Touch Handling
+##场景触摸处理的利弊
 
-Before going any further, let’s stop for a moment and muse upon some of the advantages and disadvantages of handling the touches at the scene level.
+在继续之前，让我们考虑考虑场景级别的触摸处理的优点和缺点。
 
-Touch handling at the scene level is a good place to start working with a project because it’s the simplest, easiest approach. In fact, if your sprites have transparent regions that should be ignored, such as hex grids, this may be the only reasonable solution.
+在项目中，场景级别的触摸处理是一个好的出发点，因为它是最简单，最直接的办法。事实上，如果你的精灵有透明区域需要被忽略，比如六角格，这可能是唯一合理的解决方案。
 
-However, it starts to fall apart when you have composite sprites. For example, these could contain multiple images, labels or even a health bar. It can also be unwieldy and complicated if you have different rules for different sprites.
+但是，当你有复合的精灵时它就开始显出缺点了。例如，这些可能包含多个图像、标签或甚至血条。如果你有不同的规则对应不同的精灵，它可以是很笨重和复杂的。
 
-One gotcha that comes into play when you use **nodeAtPoint** is that it always returns a node.
+一个好的办法是你使用**nodeAtPoint**，它总是返回一个节点。
 
-What if you drag outside of one of the card sprites? Because **SKScene** is a subclass of **SKNode**, if the touch location intersects no other node, the scene itself returns as a **SKNode**.
+如果你拖动到一个卡牌精灵之外会发生什么？因为**SKScene**是**SKNode**的一个子类，如果触摸位置相交没有其他节点，则场景本身会返回一个**SKNode**。
 
-When you changed the position and did animations before, you may not have known but you really should’ve checked to see that **touchedNode** was not the scene itself, but it’s okay because this is a learning experience.
+当你修改了位置并在之前做了动画，你可能不知道但你实际上应该检查**touchedNode**是不是场景本身，但因为现在是一个学习阶段，所以也没有关系。
 
-You’ll be happy to know there is a better solution…
+你会很高兴的知道这里有一个更好的解决方案…
 
-##Handle Those Touches! Handle Them!
+##处理那些触摸！处理它们！
 
-What can you do instead? Well, you can make the Card class responsible for handling its own touches. The logistics of this approach are fairly straightforward. Open **Card.swift** and add the following to **init(imageNamed:)**:
+你能做什么替代它呢？好吧，你可以使卡牌类负责处理它自己的触摸事件。这种方法的逻辑是相当明确的。打开**Card.swift**然后添加下列内容到**init(imageNamed:)**中：
 
 	userInteractionEnabled = true
 
-This allows the Card class to intercept touches as opposed to passing them through to the scene. SpriteKit will send touch events to the topmost instance with this property set.
+这使得卡牌类拦截了触摸事件而不是传递它们到场景里。SpriteKit将根据这个属性设置发送触摸事件到最上层的实例。
 
-Next, you remove the three touch handler functions,**touchesBegan()**, **touchesMoved()**, and **touchesEnded()** from **GameScene.swift** and add them to **Card.swift**.
+接下来，你需要删除这三个触摸处理函数，**GameScene.swift**中的**touchesBegan()**，**touchesMoved()**和**touchesEnded()**然后把它们添加到**Card.swift**。
 
-The original code won’t work exactly as-is, so it needs some changes to work within the node.
+原来的代码不能像拿过来就直接用，所以它需要一些变化来与节点工作。
 
-As a challenge, see if you can make the appropriate changes without checking the spoiler!
+作为一个挑战，让我们看看你能不能不看答案做出适当的改变！
 
-Hint: Since touch events are sent directly to the correct sprite, you don’t have to figure out which sprite to modify.
+提示：由于触摸事件直接发送到了正确的精灵，所以你不需要指出需要修改的精灵。
 
-###Solution Inside
+###解决方法
 
 	override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
 	  for touch in touches {
@@ -320,21 +320,21 @@ Hint: Since touch events are sent directly to the correct sprite, you don’t ha
 	  }
 	}
 
-Essentially, this copies the touch handling functions in their current state to the Card implementation. The major difference is that you no longer have to search the node hierarchy to find which node corresponds to that point.
+从本质上讲，这个复制了在他们当前的状态的触摸的处理函数到卡牌的实现里。主要的区别是你不再需要搜索节点树来找对应的节点。
 
-SpriteKit calls the function on the correct instance, so you change the properties directly.
+SpriteKit调用了正确实例的函数，所以你只需要直接修改属性。
 
-Build and run the project, and you’ll notice that this fixes the earlier issue of the flying label.
+构建和运行项目，你会注意到它解决了之前乱飞的标签的问题。
 
 ![Card can be moved the same as before](http://cdn4.raywenderlich.com/wp-content/uploads/2014/07/CardWiggleX.gif)
 
-*Card can be moved the same as before.*
+*卡牌可以像以前一样移动。*
 
-##Two Sides of the Story
+##两面性
 
-Now take a moment to observe how the Card nodes initialize. Currently, you’re simply using the string image name to create a texture, and sending that to the superclass initializer.
+现在花一点时间来研究卡牌节点是如何初始化的。目前，我们简单的使用了字符串名称来创建纹理，然后发送它到父类的初始化函数。
 
-In order to add attributes like attack and defense values, or mystical spell effects, you need to setup properties and configure them based on the specific card’s data. Instead of using strings to identify cards, which are prone to typos, you can define an enumeration instead. Open **Card.swift** and add the following between the import lines and the class definition:
+为了添加属性，如攻击和防御值，或神秘的魔法效果，你需要基于指定的卡牌数据设置属性和配置它们。你应该用枚举代替使用字符串来定义卡牌，因为字符串定义卡牌容易出现错别字。打开**Card.swift** 然后添加如下内容到import行和类定义中间：
 
 	enum CardName: Int {
 	    case CreatureWolf = 0,
@@ -347,16 +347,16 @@ In order to add attributes like attack and defense values, or mystical spell eff
 	    SpellStoneskin      // 7
 	}
 
-This defines **CardName** as a new type that you can use to identify individual cards. The integer values will be helpful as a reference when working with the cards in a deck.
+这定义了**CardName**为一个新的类型，你可以使用它来识别卡牌。整数值作为引用在一套牌里将会很有帮助。
 
-Next, you need to define some custom properties for the **Card** class. Add this between the class declaration line and **init**
+接下来，你需要为去**Card**类定义一些自定义属性。添加下列代码到类声明和**init**中间：
 
 	let frontTexture: SKTexture
 	let backTexture: SKTexture
 	var largeTexture: SKTexture?
 	let largeTextureFilename: String
 
-Replace **init(imageNamed:)** in **Card.swift** with
+替换**Card.swift**中的**init(imageNamed:)**为
 
 	init(cardNamed: CardName) {
 	 
@@ -385,7 +385,7 @@ Replace **init(imageNamed:)** in **Card.swift** with
 	  userInteractionEnabled = true
 	}
 
-Finally, open **GameScene.swift** and change **didMoveToView()** to use the new enum instead of the string filename:
+最后，打开**GameScene.swift**然后修改**didMoveToView()**来使用新的枚举替换字符串文件名称：
 
 	let wolf = Card(cardNamed: .CreatureWolf)
 	wolf.position = CGPointMake(100,200)
@@ -395,41 +395,41 @@ Finally, open **GameScene.swift** and change **didMoveToView()** to use the new 
 	bear.position = CGPointMake(300, 200)
 	addChild(bear)
 
-There are several changes here:
+下面是修改的内容：
 
-- First, you add a new type called **CardName**, the advantage of an enum like this is that the compiler knows all the possible values and it will warn you if you mistype one of the names. Additionally, Xcode autocomplete should be able to help as you type the first few characters of the name.
-- Next, you create four new properties in **Card.swift** to store the values of each **SKTexture**, which will be utilized based on the state of the card. Each card requires a front image, back image and large front image. **largeTextureFilename** is there to save memory by preventing a large image from loading until it’s actually needed.
-- Next you update the init method to take a **CardName** rather than a String and set each of the newly created properties based on the type of **Card**. This makes use of the new-and-improved **switch** statement in Swift. Here, switch cases do not automatically fall through. Additionally, you must either provide a **default** case, or cover all possible values. Once you have custom properties, such as attack and defense, you can assign those values inside the switch statement.
+- 首先，你添加了一个新的叫做**CardName**的类型，这种枚举类型的优点是编译器知道所有可能的值并会在你输入错误的时候警告你。另外，Xcode的自动完成功能可以在你输入名称的开始几个字符时提示你。
+- 接下来，你在**Card.swift**中创建了四个新的属性来存储每个**SKTexture**的值，它将基于卡牌的状态使用。每个卡牌需要一个字体图片，背景图片和大的前面图片。**largeTextureFilename**使图片需要使用时再加载以节省内存，防止载入大图片时内存溢出。
+- 接下来你更新了init方法来接受一个**CardName**而不是一个字符串，然后根据**Card**的类型设置了每个新创建的属性。这利用了Swift新的**switch**语句。这里switch的cases不会自动失败。另外，你需要提供一个**default** case，或者覆盖所有可能的值。一旦你有自定义的属性，比如攻击或防御，你可以分配这些值到switch语句中。
 
-	There is a specific order you have to follow when initializing swift objects.
-	- First, make sure all of the properties defined in the class have default values.
-	- Second, call a **designated initializer** for the superclass.
-	- Third, set any properties defined in the superclass, and call any functions you need to on the object.
+	当初始化swift对象时有一个特定的顺序你必须遵循。
+	- 首先，确保类定义的所有属性有默认的值。
+	- 其次，调用父类的**designated initializer**。
+	- 第三，设置所有父类中定义的属性，然后调用你需要的对象的任意函数。
 
-- Lastly, you update the code in **GameScene.swift** to use the new init method of **Card**.
+- 最后，你更新了**GameScene.swift**中的代码来使用新的**Card**的init函数。
 
-Build and run the project, and make sure that everything works just as it did before.
+构建和运行项目，确保一切像之前一样工作。
 
->**Note:** Since you’re just working with seven cards, there’s no need for anything more complicated to initialize cards. This particular strategy probably won’t work very well if you have 10′s or 100′s of cards. In that case, you’ll a system to store all of the card attributes in a configuration file, like a .json file. You’ll also want to design the init system to pull out the relevant part of the configuration as a dictionary and build the card data from that.
+>**注：**因为你只操作了七个卡牌，所以不需要复杂的初始化卡片。当你有几十或几百个卡牌时这种特殊的策略可能不太好用。到那时，你需要系统的存储所有卡牌的属性到一个配置文件里，比如一个.json文件。你还需要设置初始化系统从配置文件中抽出数据做为字典来构建卡牌。
 
->**Challenge:**
-Finish **Card** by adding the correct images for the other cards, such as the fierce dragon. You’ll find the images in the **cards** folder inside **Supporting Files**.
+>**挑战：**
+通过为其他卡牌添加正确的图片来完成**Card**，比如凶猛的龙。你将会在**Supporting Files**中的**cards**文件夹中找到图片。
 
 >![Image of Dragon creature card](http://cdn3.raywenderlich.com/wp-content/uploads/2014/07/dragon-card.png)
 	
 >*Dun Dun Dun*
 
-##Flip Flop
+##触发翻转
 
-Finally, add some card-like actions to make the game more realistic. Since the basic premise is that two players will share an iPad, the cards need to be able to turn face down so the other player cannot see them.
+最后，添加一些卡牌类动作来使游戏更逼真。由于基本前提是两个玩家共享一个iPad，所以卡牌需要正面朝下来使其他玩家无法看到它们。
 
-An easy way to do this is to make the card flip over when you double tap it. However, you need a property to keep track of the card state to make this possible.
+一种实现的简单方法是当双击它时翻转卡牌。但是，你需要一个属性来追踪卡牌的状态。
 
-Open **Card.swift** and add the following property below the other properties:
+打开**Card.swift**然后添加下列属性到其他属性的下面：
 
 	var faceUp = true
 
-Next, add a function to swap the textures that will make a card appears flipped:
+接下来，添加一个交换的纹理使卡牌出现翻转效果：
 
 	func flip() {
 	  if faceUp {
@@ -447,25 +447,25 @@ Next, add a function to swap the textures that will make a card appears flipped:
 	  }
 	}
 
-Finally, add the following to the beginning of touchesBegan, just inside the for-in loop.
+最后，添加如下代码到touchesBegan的开始，在for-in循环中：
 
 	if touch.tapCount > 1 {
 	  flip()
 	}
 
-Now you understand why you saved the front and back card images as textures earlier — it makes flipping the cards delightfully easy. You also hide **damageLabel** so the number is not shown when the card is face down.
+现在你应该明白了为什么之前我们保存了卡牌的正面和背面的图片为纹理 — 它让翻转卡牌如此简单。你还需要隐藏**damageLabel**，这样卡牌朝下时数字才不会显示。
 
-Build and run the project and flip those cards.
+构建和运行项目然后翻转那些卡牌。
 
 ![Card flip](http://cdn5.raywenderlich.com/wp-content/uploads/2014/07/CardFlipNoAnim.gif)
 
-*Simple card flip by swapping out the texture. The little bounce is the pick-up animation triggered by the first touch.*
+*通过交换纹理来实现卡牌的翻转。第一次点击卡牌时会触发一个小的弹跳效果。*
 
->**Note:** At this point, it’s ideal for the damage label to be a property that initializes during Card initialization. For the sake of keeping this tutorial simple and straightforward, it is in here as a child node. Try pulling it from GameScene and putting it into Card for a little extra credit.
+>**注：**在这里，伤害标签在卡牌初始化时作为属性初始化是完美的。作为保持本教程简洁的目的，它在这里还是一个子节点。试着把它从GameScene放到Card中。
 
-The effect is ok, but you can do better. One trick is to use the **scaleToX** animation to make it look as though it actually flips.
+效果还不错，但你还可以做得更好。一个技巧是使用**scaleToX**动画来使它看下来像真的翻转了。
 
-Replace **flip** with:
+用如下代码替换**flip**：
 
 	func flip() {
 	  let firstHalfFlip = SKAction.scaleXTo(0.0, duration: 0.4)
@@ -494,24 +494,24 @@ Replace **flip** with:
 	  }
 	}
 
-The **scaleXTo** action shrinks only the horizontal direction and gives it a pretty cool 2D flip animation. The animation splits into two halves so that you can swap the texture halfway. The **setScale** function makes sure the other scale animations don’t get in the way.
+**scaleXTo**只收缩了水平方向，制造了一个非常酷的2D翻转动画。动画分成两半，这样你可以分别互换它们的纹理。**setScale**函数确保其他缩放动画不会影响到翻转。
 
-Build and run the project to see the new “flip” effect in action.
+构建和运行项目来看看新的“翻转”效果。
 
 ![Card flip with animation](http://cdn4.raywenderlich.com/wp-content/uploads/2014/07/CardFlipWithAnim.gif)
 
-*Now you have a nice looking flip animation.*
+*现在你有了看起来很不错的翻转动画。*
 
-Things are looking great, but you can’t fully appreciate the bear’s goofy grin when the cards are so small. If only you could enlarge a selected card to see its details…
+看起来还不错，但卡牌这么小，你还不能完全理解熊的傻笑。所以你需要能放大选中的卡牌来看它的细节…
 
-##Big Time
+##放大时刻
 
-The last effect you’ll work with in this tutorial is modifying the double tap action so that it enlarges the card. Add these two properties to the beginning of **Card.swift** with the other properties:
+你将在本教程学习的最后一个效果是修改双击动作来放大卡牌。添加这两个属性到**Card.swift**的最开始的其他属性的前面：
 
 	var enlarged = false
 	var savedPosition = CGPointZero
 
-Add the following method to perform the enlarge action:
+添加如下方法来执行放大动作：
 
 	func enlarge() {
 	  if enlarged {
@@ -529,7 +529,7 @@ Add the following method to perform the enlarge action:
 	  }
 	}
 
-Remember to update **touchesBegan()** to call the new function, instead of **flip()**
+记得更新**touchesBegan()**来调用新的函数替换**flip()**
 
 	if touch.tapCount > 1 {
 	  enlarge()
@@ -537,26 +537,27 @@ Remember to update **touchesBegan()** to call the new function, instead of **fli
 	 
 	if enlarged { return }
 
-Finally, make a small update to **touchesMoved()** and **touchesEnded** by adding the following line to each before the **for-in** loop:
+最后，给**touchesMoved()**和**touchesEnded**做一点小修改，添加如下代码到每个**for-in**循环前面：
 
 	if enlarged { return }
 
-You need to add the extra property savedPosition so the card can be moved back to its original position. This is the point when touch-handling logic becomes a bit tricky, as mentioned earlier.
+你需要添加额外的属性savedPosition，这样卡牌才能移回它原来的位置。正如前面提到的，这是触摸处理逻辑比较棘手的问题。
 
-The tapCount check at the beginning of the function prevents glitches when the card is enlarged and then tapped again. Without the early return, the large image would shrink and start the wiggle animation.
+在函数开始处的tapCount检查防止了卡牌已经被放大了再次双击的错误。没有提前退出，大图片会收缩并开始摆动动画。
 
-It also doesn’t make sense to move the enlarged image, and there is nothing to do when the touch ends, so both functions return early when the card is enlarged.
-Build and run the app to see the card grow and grow to fill the screen.
+移动放大的图片也是没有意义的，所以触摸结束后没有什么可做的，所以当卡牌放大时所有函数都提前退出了。
+
+构建和运行应用程序，查看卡牌放大到填充屏幕。
 
 ![Basic card enlarging.](http://cdn3.raywenderlich.com/wp-content/uploads/2014/07/CardEnlargeNoAnim.gif)
 
-*Basic card enlarging. Would look much better with some animation, and the enlarged image is fuzzy.*
+*基础卡牌放大效果。动画看起来好多了，放大的图片是模糊的。*
 
-But why is it all pixelated? Vicki’s artwork is much too nice to place under such duress. You’re enlarging this way because you’re not using the large versions of the images in the **cards_large** folder inside **Supporting Files**.
+但是为什么它是像素化的？Vicki的美工在这种情况下可应该是很漂亮的。你放大成这样是因为你没有使用**Supporting Files**里**cards_large**文件夹里的放大版本的图片。
 
-Because loading the large images for all the cards at the beginning can waste memory, it’s best to make it so they don’t load until the user needs them.
+因为一开始就加载所有卡牌的大图片会浪费内存，所以最好在用户不需要它们的时候不加载它们。
 
-The final version of the enlarge function is as follows:
+放大函数的最终版本如下：
 
 	func enlarge() {
 	  if enlarged {
@@ -588,32 +589,32 @@ The final version of the enlarge function is as follows:
 	  }
 	}
 
-The animations are fairly straightforward at this point.
+动画现在非常明确了。
 
-The card’s position saves before running an animation, so it returns to its original position. To prevent the pickup and drop animations from interfering with the animation as it scales up, you add the **removeAllActions()** function.
+卡牌的位置在运行动画之前保存了，所以它返回了它原来的位置。为了防止它放大时被拿起和放下动画打断，你添加了**removeAllActions()**函数。
 
-When the scale down animations run, the enlarged and zPosition properties don’t set until the animation completes. If these values change earlier, an enlarged card sitting behind another card will appear to slide underneath as it returns to its previous position.
+当缩小动画运行时，enlarged和zPosition属性没有设置直到动画完成。如果这些值在完成前被修改了，被放大的卡牌后面的卡牌将会显示出来，它也会返回它之前的位置。
 
-Since **largeTexture** is defined as an **optional**, it can have a value of nil, or “no value”. The if statement tests to see if it has a value, and loads the texture if it doesn’t.
+由于**largeTexture**被定义为**optional**，它的值可以为nill，或“没有值”。if语句测试了它，来看它是否有值，如果它没有则加载纹理。
 
->**Note:** Optionals are a core part of learning Swift, especially since it works differently than nil values in Objective-C.
+>**注：** Optional是学习Swift的一个核心部分。特别是它不同于Objective-C中的**nil**值。
 
-Build and run the app once again. You should now see a nice, smooth animation from the card’s initial position to the final enlarged position. You’ll also see the cards in full, clean, unpixelated splendor.
+再次构建和运行应用程序。你现在应该看到一个从初始位置到最终的放大的位置漂亮的，平滑的动画。你也会看到卡牌是非像素化的、干净的、填充的。
 
 ![Card enlargement with animation.](http://cdn4.raywenderlich.com/wp-content/uploads/2014/07/CardEnlargeAnim.gif)
 
-*Animating the card enlargement, and swapping to the large image make this look much nicer.*
+*把卡牌变大，然后换成大图片让它看起来更好。*
 
->**Final Challenge:** Sound effects are an important part of any game, and there are some sound files included in the starter project. See if you can use **SKAction.playSoundFileNamed(soundFile:, waitForCompletion:)** to add a sound effect to the card flip, and the enlarge action.
+>**最终挑战：**音效是任何游戏的一个重要部分，启动项目中包含了很多声音文件。看看你能不能使用**SKAction.playSoundFileNamed(soundFile:, waitForCompletion:)**来添加音效到卡牌翻转中和放大的动作中。
 
-##Where to Go from Here?
+##下一步？
 
-The final project for this tutorial can be found [here](https://bitbucket.org/ecerney/ccg-walkthrough-final/get/master.zip).
+你可以在[这里](https://bitbucket.org/ecerney/ccg-walkthrough-final/get/master.zip)找到本教程的最终项目。
 
-At this point, you understand the basic — and some not so basic — card mechanics that you can put to use in your own card game.
+到了这里，你已经理解了一些可以在你自己的卡牌游戏中使用的基础的 — 和一些不那么基础的 — 卡牌机制。
 
-This sample project has many subtle animations that you can tweak, so make sure you play around with the different values to find what you like and what works for you.
+这个示例项目中有很多微秒的动画你可以调整，所以确保你已经试过不同的值来找到你喜欢的和适合你的。
 
-Once you’re happy with the animations, there are board regions, decks, attacks and many other features that are simply too much to address in a single article like this. Take a look at the completed example game in [Objective-C](https://bitbucket.org/bcbroom/ccg/get/master.zip) and [Swift](https://bitbucket.org/bcbroom/ccg-swift/get/master.zip) to learn more about the other elements that go into game development.
+一旦你对动画满意了，这里还有板区域，牌组，攻击和很多其他特性，内容很多所以不能简单像这篇一样的一篇文章中全部讲完。你可以查看用[Objective-C](https://bitbucket.org/bcbroom/ccg/get/master.zip)和[Swift](https://bitbucket.org/bcbroom/ccg-swift/get/master.zip)完成的示例游戏，了解更多有关游戏开发的其他元素。
 
-Use the forum below to comment, ask questions or share your ideas for animating cards with Swift. Thanks for taking the time to work through this tutorial!
+请使用论坛在下面评论、问问题或分享你对Swift的卡牌动画的想法。感谢你抽出宝贵的时间学习本教程！
